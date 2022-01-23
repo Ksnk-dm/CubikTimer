@@ -23,7 +23,7 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 
 ## Libraries and tools used in the project
 
-* [Design Support Library](https://developer.android.com/topic/libraries/support-library/features#design)
+* [Design Support Library](https://developer.android.com/jetpack/androidx)
 The Design package provides APIs to support adding material design components and patterns to your apps.
 * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
 A flexible view for providing a limited window into a large data set.
