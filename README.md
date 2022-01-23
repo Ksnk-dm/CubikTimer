@@ -16,7 +16,7 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 [![License Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=true)](http://www.apache.org/licenses/LICENSE-2.0)
 ![minSdkVersion 21](https://img.shields.io/badge/minSdkVersion-24-red.svg?style=true)
 ![compileSdkVersion 27](https://img.shields.io/badge/compileSdkVersion-31-yellow.svg?style=true)
-[![Unit tests](https://github.com/Avonion/android_MusicPlayer/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/unit_tests.yml)
+[![Unit tests](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/badge.svg)](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/unit_tests.yml)
 
 
 ![First screen](https://i2.piccy.info/i9/1a4c97ab9c20a1cae4a283153c66da82/1642967155/115786/1453485/ezgif_2_9b8041a482.gif)  ![Second screen](https://i2.piccy.info/i9/2a3a171c479defab1392b643c6c00180/1642967321/10709/1453485/ezgif_2_5803256920.jpg)
@@ -27,5 +27,5 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 The Design package provides APIs to support adding material design components and patterns to your apps.
 * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
 A flexible view for providing a limited window into a large data set.
-* [PercentRelativeLayout](https://developer.android.com/reference/android/support/percent/PercentRelativeLayout.html)
-Subclass of RelativeLayout that supports percentage based dimensions and margins.
+* [Picasso](https://square.github.io/picasso)
+Picasso allows for hassle-free image loading in application
