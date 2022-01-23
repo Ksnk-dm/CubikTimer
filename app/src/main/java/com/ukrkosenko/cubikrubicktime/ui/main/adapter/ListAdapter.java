@@ -1,4 +1,4 @@
-package com.ukrkosenko.cubikrubicktime;
+package com.ukrkosenko.cubikrubicktime.ui.main.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,11 +7,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ukrkosenko.cubikrubicktime.R;
+import com.ukrkosenko.cubikrubicktime.empty.Records;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListViewHolder>{
-    private List<Records> items = new ArrayList<>();
+    private List<Records> items;
+
+    public ListAdapter(){
+        items = new ArrayList<>();
+    }
+
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,10 +52,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder>{
 
     public void addItems(Records records){
         items.add(records);
-        notifyDataSetChanged();
-    }
-
-    public void updateList(){
         notifyDataSetChanged();
     }
 }
