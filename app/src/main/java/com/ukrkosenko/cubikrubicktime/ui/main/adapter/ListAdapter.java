@@ -1,4 +1,4 @@
-package com.ukrkosenko.cubikrubicktime;
+package com.ukrkosenko.cubikrubicktime.ui.main.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.ukrkosenko.cubikrubicktime.R;
+import com.ukrkosenko.cubikrubicktime.empty.Records;
 
 import java.util.ArrayList;
 import java.util.List;

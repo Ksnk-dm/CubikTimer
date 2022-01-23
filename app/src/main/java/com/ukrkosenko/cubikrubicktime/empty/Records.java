@@ -1,4 +1,4 @@
-package com.ukrkosenko.cubikrubicktime;
+package com.ukrkosenko.cubikrubicktime.empty;
 
 public class Records {
     private String time;

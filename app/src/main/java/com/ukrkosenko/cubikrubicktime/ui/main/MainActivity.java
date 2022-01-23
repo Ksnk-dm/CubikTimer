@@ -1,4 +1,4 @@
-package com.ukrkosenko.cubikrubicktime;
+package com.ukrkosenko.cubikrubicktime.ui.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +25,12 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.ukrkosenko.cubikrubicktime.Contains;
+import com.ukrkosenko.cubikrubicktime.ui.main.adapter.ListAdapter;
+import com.ukrkosenko.cubikrubicktime.R;
+import com.ukrkosenko.cubikrubicktime.empty.Records;
+import com.ukrkosenko.cubikrubicktime.TimerRun;
+import com.ukrkosenko.cubikrubicktime.ui.info.InfoActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;

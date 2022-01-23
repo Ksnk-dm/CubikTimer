@@ -10,11 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CubikRubickTime">
         <activity
-            android:name=".InfoActivity"
+            android:name=".ui.info.InfoActivity"
             android:exported="true"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>
