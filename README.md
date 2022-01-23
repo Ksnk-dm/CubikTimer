@@ -16,7 +16,7 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 [![License Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=true)](http://www.apache.org/licenses/LICENSE-2.0)
 ![minSdkVersion 21](https://img.shields.io/badge/minSdkVersion-24-red.svg?style=true)
 ![compileSdkVersion 27](https://img.shields.io/badge/compileSdkVersion-31-yellow.svg?style=true)
-
+[![Unit tests](https://github.com/Avonion/android_MusicPlayer/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/unit_tests.yml)
 
 [Transition](https://dribbble.com/shots/1850527-Music-Player-Transition) by [Anish Chandran](https://dribbble.com/anish_chandran) | Code by [André Mion](https://github.com/andremion)
 --- | ---
