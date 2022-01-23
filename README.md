@@ -8,11 +8,8 @@
 
 The intuitive interface of the app will help you practice Rubik's Cube. Track your best score.
 
-This article talks about how would be to code an UI proposal, skipping some basic Android details and focusing on transition and animation approach...
+It is very easy to use, just hold the screen and then release it and the stopwatch will start counting down the time. Upon completion of the assembly, it is enough to press once on the screen and the stopwatch will stop. The results will be displayed on the left panel, the best result will be at the bottom of the screen.
 
-Read more at [here](https://medium.com/@andremion/music-player-3a85864d6df7#.iklz50r6n)
-
-#### Special thanks to [michaelizer](https://github.com/michaelizer) for the awesome logo.
 
 </br>
 
