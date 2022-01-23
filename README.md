@@ -19,7 +19,7 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 [![Unit tests](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/badge.svg)](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/unit_tests.yml)
 
 
-![First screen](https://i2.piccy.info/i9/1a4c97ab9c20a1cae4a283153c66da82/1642967155/115786/1453485/ezgif_2_9b8041a482.gif)  ![Second screen](https://i2.piccy.info/i9/2a3a171c479defab1392b643c6c00180/1642967321/10709/1453485/ezgif_2_5803256920.jpg)
+![First screen](https://i2.piccy.info/i9/1a4c97ab9c20a1cae4a283153c66da82/1642967155/115786/1453485/ezgif_2_9b8041a482.gif)  ![Second screen](https://i.ibb.co/7YdRNLD/ezgif-2-52ef48ba91.gif)
 
 ## Libraries and tools used in the project
 
