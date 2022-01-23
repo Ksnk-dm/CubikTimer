@@ -10,11 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CubikRubickTime">
         <activity
-            android:name=".InfoActivity"
+            android:name=".ui.info.InfoActivity"
             android:exported="true"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>
@@ -25,7 +25,7 @@
         </activity> <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9529525264090579~9208940568" />
+            android:value="ca-app-pub-2981423664535117~9485004591" />
     </application>
 
 </manifest>

@@ -3,13 +3,13 @@ package com.ukrkosenko.cubikrubicktime;
 import android.os.Handler;
 import android.widget.TextView;
 
-public class StopWatc {
-    TextView textView;
-    Handler handler = new Handler();
-    boolean isRunning;// to keep track of the state of handler to avoid creating multiple threads.
+public class TimerRun {
+    public TextView textView;
+    private Handler handler = new Handler();
+    boolean isRunning;
     private int time = 0;
 
-    public StopWatc(TextView textView) {// this textview would be updated by the stop-watch
+    public TimerRun(TextView textView) {// this textview would be updated by the stop-watch
         this.textView = textView;
     }
 
@@ -28,14 +28,11 @@ public class StopWatc {
         String minute = String.format("%02d", min);
         String sec = String.format("%02d", secs);
         String ms = String.format("%02d", mss);
-
-
         String timeString = minute + "." + sec + "." + ms;
         return timeString;
     }
 
     public void start() {
-
         if (!isRunning) {
             time = 0;
             startTime();
@@ -44,7 +41,7 @@ public class StopWatc {
 
     public void stop() {
         time = 0;
-        textView.setText("00.00.00");
+        textView.setText(Contains.TIME_NULL);
         handler.removeCallbacksAndMessages(null);
         isRunning = false;
     }
