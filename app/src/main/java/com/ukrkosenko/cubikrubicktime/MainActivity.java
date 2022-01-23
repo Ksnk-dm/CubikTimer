@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textView.getText().equals("00.00.06")) {
-                    textView.setText("00.00.00");
+                if (textView.getText().equals(Contains.TIME_NULL_SIX)) {
+                    textView.setText(Contains.TIME_NULL);
                 }
 
 
@@ -93,21 +93,14 @@ public class MainActivity extends AppCompatActivity {
                     stopwatch.pause();
                     textView.setTextColor(Color.WHITE);
 
-                    if (!textView.getText().equals("00.00.00")) {
+                    if (!textView.getText().equals(Contains.TIME_NULL)) {
                         convertToInt(stopwatch.textView.getText().toString());
                         listRecords.add(new Records(stopwatch.textView.getText().toString()));
-//                    ArrayAdapter<Records> arrayAdapter
-//                            = new ArrayAdapter<Records>(MainActivity.this, android.R.layout.simple_list_item_1, arraList);
-//                    listView.setAdapter(arrayAdapter);
-                        //       mAdapter.setItems(arraList);
                         mAdapter.addItems(new Records(stopwatch.textView.getText().toString()));
                         mAdapter.notifyDataSetChanged();
                     }
                 } else {
                     textView.setTextColor(Color.WHITE);
-                    // textView.setText("00.00.00");
-                    //  stopwatch.stop();
-
                 }
             }
         });
@@ -116,10 +109,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 if (!stopwatch.getStatus()) {
-                    textView.setText("00.00.00");
-                    //       stopwatch.stop();
+                    textView.setText(Contains.TIME_NULL);
                     textView.setTextColor(Color.BLUE);
-//                stopwatch.start();
                 }
 
                 return true;
@@ -133,34 +124,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 switch (motionEvent.getAction()) {
-//                    case MotionEvent.ACTION_DOWN: // нажатие
-//                        stopwatch.getTime();
-//                        if(String.valueOf(stopwatch.getTime()).equals("0")){
-//                            stopwatch.pause();
-//                        }
-//
-//                        break;
-                    case MotionEvent.ACTION_MOVE: // движение
-
-                        break;
-                    case MotionEvent.ACTION_UP: // отпускание
-                        Log.d("touch", "otjal");
-                        if (textView.getText().equals("00.00.00")) {
+                    case MotionEvent.ACTION_UP:
+                        if (textView.getText().equals(Contains.TIME_NULL)) {
                             textView.setTextColor(Color.WHITE);
                             if (!stopwatch.getStatus()) {
                                 stopwatch.start();
                             }
-
-
-                            break;
-
                         } else {
                             if (!stopwatch.getStatus()) {
                                 textView.setTextColor(Color.RED);
                             }
-
-                            break;
                         }
+                        break;
                 }
 
                 return false;
@@ -242,5 +217,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 }

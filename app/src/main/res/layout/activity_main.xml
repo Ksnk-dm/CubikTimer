@@ -59,7 +59,7 @@
                     android:layout_marginLeft="15dp"
                     android:foregroundGravity="bottom"
                     android:gravity="bottom"
-                    android:text="BEST:"
+                    android:text="@string/best"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />

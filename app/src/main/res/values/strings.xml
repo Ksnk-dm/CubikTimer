@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cube Rubik Time</string>
+    <string name="best">BEST:</string>
+
 </resources>
