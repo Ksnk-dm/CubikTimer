@@ -31,4 +31,4 @@ A flexible view for providing a limited window into a large data set.
 Picasso allows for hassle-free image loading in application
 * [Admob](https://developers.google.com/admob/android/quick-start)
 Ads in application
-Gradle: 7.0.4
+* Gradle: 7.0.4
