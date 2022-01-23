@@ -93,16 +93,10 @@
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="false"
-                android:layout_centerHorizontal="false"
                 android:layout_marginTop="10dp"
                 android:layout_weight="3"
                 app:adSize="BANNER"
-                app:adUnitId="ca-app-pub-9529525264090579/3956613886"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/listRecord"
-                app:layout_constraintTop_toBottomOf="@+id/timeText"></com.google.android.gms.ads.AdView>
+                app:adUnitId="ca-app-pub-2981423664535117/5354187896"></com.google.android.gms.ads.AdView>
 
             <ImageButton
                 android:id="@+id/info_image_button"

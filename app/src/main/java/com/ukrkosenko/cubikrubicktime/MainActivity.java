@@ -1,5 +1,6 @@
 package com.ukrkosenko.cubikrubicktime;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -15,7 +17,14 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Records> listRecords;
     private ImageButton infoImageButton;
     private TimerRun timerRun;
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
@@ -44,18 +54,36 @@ public class MainActivity extends AppCompatActivity {
         initRecycler();
         setVariables();
         setListeners();
+        initBanner();
+        initPageBanner(initAdRequest());
+    }
 
-//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-//            @Override
-//            public void onInitializationComplete(InitializationStatus initializationStatus) {
-//            }
-//        });
-//        mAdView = findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//
-//        mAdView.loadAd(adRequest);
+    private void initBanner() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView.loadAd(initAdRequest());
+    }
 
+    private void initPageBanner(AdRequest adRequest) {
+        InterstitialAd.load(this, "ca-app-pub-2981423664535117/4013186062", adRequest,
+                new InterstitialAdLoadCallback() {
+                    @Override
+                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                        mInterstitialAd = interstitialAd;
+                    }
 
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        mInterstitialAd = null;
+                    }
+                });
+    }
+
+    private AdRequest initAdRequest() {
+        return new AdRequest.Builder().build();
     }
 
     private void setVariables() {
@@ -69,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         infoImageButton = findViewById(R.id.info_image_button);
         minTextView = findViewById(R.id.min_text_view);
         recordRecyclerView = findViewById(R.id.record_recycler_view);
+        mAdView = findViewById(R.id.adView);
     }
 
     private void checkFirstStart() {
@@ -114,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         timeTextView.setOnTouchListener(timeTextViewOnTouchListener);
     }
 
-
     private void convertToInt(String time) {
         String result = time.replaceAll("\\.", "");
         int i = Integer.parseInt(result);
@@ -155,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private final View.OnClickListener timeTextOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -173,6 +200,11 @@ public class MainActivity extends AppCompatActivity {
     private final View.OnClickListener imageButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (mInterstitialAd != null) {
+                mInterstitialAd.show(MainActivity.this);
+            } else {
+                Log.d(Contains.LOG, "null");
+            }
             Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
             startActivity(infoActivity);
         }
@@ -188,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
-
 
     private final View.OnTouchListener timeTextViewOnTouchListener = new View.OnTouchListener() {
         @SuppressLint("ClickableViewAccessibility")
