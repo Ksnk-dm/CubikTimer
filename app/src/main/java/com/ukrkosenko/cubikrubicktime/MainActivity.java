@@ -8,13 +8,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdView;
@@ -24,16 +22,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView textView;
-    private ListView listView;
+    private TextView timeTextView;
     private RecyclerView recordRecyclerView;
     private ListAdapter mAdapter;
     private GridLayoutManager layoutManager;
     private AdView mAdView;
     private TextView minTextView;
-    private List<Integer> resultList = new ArrayList<>();
-    private List<Records> listRecords = new ArrayList();
+    private List<Integer> resultList;
+    private List<Records> listRecords;
     private ImageButton infoImageButton;
+    private TimerRun timerRun;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +40,10 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.timeText);
-        listView = findViewById(R.id.listRecord);
-        infoImageButton = findViewById(R.id.info_image_button);
-        infoImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
-                startActivity(infoActivity);
-            }
-        });
-        minTextView = findViewById(R.id.min_text_view);
-        recordRecyclerView = findViewById(R.id.record_recycler_view);
-        layoutManager = new GridLayoutManager(this, 1);
-        recordRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ListAdapter();
-        recordRecyclerView.setAdapter(mAdapter);
-
+        init();
+        initRecycler();
+        setVariables();
+        setListeners();
 
 //        MobileAds.initialize(this, new OnInitializationCompleteListener() {
 //            @Override
@@ -69,114 +55,65 @@ public class MainActivity extends AppCompatActivity {
 //
 //        mAdView.loadAd(adRequest);
 
-        StopWatc stopwatch = new StopWatc(textView);
-        listView.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    stopwatch.pause();
-                }
-                return true;
-            }
-        });
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (textView.getText().equals(Contains.TIME_NULL_SIX)) {
-                    textView.setText(Contains.TIME_NULL);
-                }
-
-
-                if (stopwatch.getStatus()) {
-                    stopwatch.pause();
-                    textView.setTextColor(Color.WHITE);
-
-                    if (!textView.getText().equals(Contains.TIME_NULL)) {
-                        convertToInt(stopwatch.textView.getText().toString());
-                        listRecords.add(new Records(stopwatch.textView.getText().toString()));
-                        mAdapter.addItems(new Records(stopwatch.textView.getText().toString()));
-                        mAdapter.notifyDataSetChanged();
-                    }
-                } else {
-                    textView.setTextColor(Color.WHITE);
-                }
-            }
-        });
-
-        textView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (!stopwatch.getStatus()) {
-                    textView.setText(Contains.TIME_NULL);
-                    textView.setTextColor(Color.BLUE);
-                }
-
-                return true;
-            }
-        });
-
-
-        textView.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_UP:
-                        if (textView.getText().equals(Contains.TIME_NULL)) {
-                            textView.setTextColor(Color.WHITE);
-                            if (!stopwatch.getStatus()) {
-                                stopwatch.start();
-                            }
-                        } else {
-                            if (!stopwatch.getStatus()) {
-                                textView.setTextColor(Color.RED);
-                            }
-                        }
-                        break;
-                }
-
-                return false;
-            }
-
-
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//                    //do stuff here
-//                    Log.d("touch", "torch");
-//                    textView.setTextColor(Color.BLUE);
-//                   // stopwatch.pause();
-//                }
-//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//                    //do stuff here
-//                    Log.d("touch", "otjal");
-//                    textView.setTextColor(Color.WHITE);
-//                    stopwatch.start();
-
-//                    if (arraList.size() == 0) {
-//                        arraList.add(new Records(""));
-//
-//                    } else {
-//                        arraList.add(new Records(stopwatch.textView.getText().toString()));
-//                        ArrayAdapter<Records> arrayAdapter
-//                                = new ArrayAdapter<Records>(MainActivity.this, android.R.layout.simple_list_item_1, arraList);
-//
-//                        listView.setAdapter(arrayAdapter);
-//
-//                    }
-//                    if (arraList.size() == 8) {
-//                        arraList.clear();
-//                    }
-////
-//
-//                }
-//                return true;
-//            }
-//        });
-
-        });
     }
+
+    private void setVariables() {
+        timerRun = new TimerRun(timeTextView);
+        resultList = new ArrayList<>();
+        listRecords = new ArrayList();
+    }
+
+    private void init() {
+        timeTextView = findViewById(R.id.timeText);
+        infoImageButton = findViewById(R.id.info_image_button);
+        minTextView = findViewById(R.id.min_text_view);
+        recordRecyclerView = findViewById(R.id.record_recycler_view);
+    }
+
+    private void checkFirstStart() {
+        if (timeTextView.getText().equals(Contains.TIME_NULL_SIX)) {
+            timeTextView.setText(Contains.TIME_NULL);
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void setNewItem() {
+        if (!timeTextView.getText().equals(Contains.TIME_NULL)) {
+            convertToInt(timerRun.textView.getText().toString());
+            mAdapter.addItems(new Records(timerRun.textView.getText().toString()));
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void checkClickIfTimerStart() {
+        if (timeTextView.getText().equals(Contains.TIME_NULL)) {
+            timeTextView.setTextColor(Color.WHITE);
+            if (!timerRun.getStatus()) {
+                timerRun.start();
+            }
+        } else {
+            if (!timerRun.getStatus()) {
+                timeTextView.setTextColor(Color.RED);
+            }
+        }
+    }
+
+    private void initRecycler() {
+        layoutManager = new GridLayoutManager(this, 1);
+        recordRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new ListAdapter();
+        recordRecyclerView.setAdapter(mAdapter);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setListeners() {
+        infoImageButton.setOnClickListener(imageButtonOnClickListener);
+        timeTextView.setOnClickListener(timeTextOnClickListener);
+        timeTextView.setOnLongClickListener(timeTextOnLongClickListener);
+        timeTextView.setOnTouchListener(timeTextViewOnTouchListener);
+    }
+
 
     private void convertToInt(String time) {
         String result = time.replaceAll("\\.", "");
@@ -209,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                 minTextView.setText(strToArray[0] + strToArray[1] + "." + strToArray[2]
                                         + strToArray[3] + "." + strToArray[4] + strToArray[5]);
                             } else {
-                                minTextView.setText("error");
+                                minTextView.setText(getResources().getString(R.string.error));
                             }
                         }
                     }
@@ -217,4 +154,52 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    private final View.OnClickListener timeTextOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            checkFirstStart();
+            if (timerRun.getStatus()) {
+                timerRun.pause();
+                timeTextView.setTextColor(Color.WHITE);
+                setNewItem();
+            } else {
+                timeTextView.setTextColor(Color.WHITE);
+            }
+        }
+    };
+
+    private final View.OnClickListener imageButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
+            startActivity(infoActivity);
+        }
+    };
+
+    private final View.OnLongClickListener timeTextOnLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            if (!timerRun.getStatus()) {
+                timeTextView.setText(Contains.TIME_NULL);
+                timeTextView.setTextColor(Color.BLUE);
+            }
+            return true;
+        }
+    };
+
+
+    private final View.OnTouchListener timeTextViewOnTouchListener = new View.OnTouchListener() {
+        @SuppressLint("ClickableViewAccessibility")
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    checkClickIfTimerStart();
+                    break;
+            }
+            return false;
+        }
+    };
 }

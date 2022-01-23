@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cube Rubik Time</string>
+    <string name="app_name">Rubik\'s Cube Timer</string>
     <string name="best">ЛУЧШИЙ:</string>
+    <string name="error">Ошибка</string>
+    <string name="title">Инструкция использования</string>
+    <string name="hold">-Удерживайте экран и отпустите, чтобы начать обратный отсчет</string>
+    <string name="one_click">-Нажмите один раз, чтобы остановить таймер</string>
+    <string name="result">-Ваши результаты будут записаны слева, а лучший результат будет внизу.</string>
 </resources>

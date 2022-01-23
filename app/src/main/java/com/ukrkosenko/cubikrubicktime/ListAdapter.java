@@ -11,7 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListViewHolder>{
-    private List<Records> items = new ArrayList<>();
+    private List<Records> items;
+
+    public ListAdapter(){
+        items = new ArrayList<>();
+    }
+
     @NonNull
     @Override
     public ListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,10 +49,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder>{
 
     public void addItems(Records records){
         items.add(records);
-        notifyDataSetChanged();
-    }
-
-    public void updateList(){
         notifyDataSetChanged();
     }
 }
