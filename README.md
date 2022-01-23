@@ -14,8 +14,8 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 </br>
 
 [![License Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=true)](http://www.apache.org/licenses/LICENSE-2.0)
-![minSdkVersion 21](https://img.shields.io/badge/minSdkVersion-21-red.svg?style=true)
-![compileSdkVersion 27](https://img.shields.io/badge/compileSdkVersion-27-yellow.svg?style=true)
+![minSdkVersion 21](https://img.shields.io/badge/minSdkVersion-24-red.svg?style=true)
+![compileSdkVersion 27](https://img.shields.io/badge/compileSdkVersion-31-yellow.svg?style=true)
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Music--Player-green.svg?style=true)](https://android-arsenal.com/details/3/3855)
 [![MaterialUp Music-Player](https://img.shields.io/badge/MaterialUp-Music--Player-blue.svg?style=true)](https://www.uplabs.com/posts/music-player-open-source-apps)
