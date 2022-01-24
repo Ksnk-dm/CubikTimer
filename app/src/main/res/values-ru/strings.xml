@@ -7,4 +7,5 @@
     <string name="hold">-Удерживайте экран и отпустите, чтобы начать обратный отсчет</string>
     <string name="one_click">-Нажмите один раз, чтобы остановить таймер</string>
     <string name="result">-Ваши результаты будут записаны слева, а лучший результат будет внизу.</string>
+    <string name="dev">Разработано Ksnk-dm</string>
 </resources>
