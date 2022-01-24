@@ -6,4 +6,5 @@
     <string name="hold">-Hold the screen and release to start the countdown</string>
     <string name="one_click">-Press once to stop the timer</string>
     <string name="result">-Your results will be written on the left side, with the best one written at the bottom.</string>
+    <string name="dev">Developed By Ksnk-dm</string>
 </resources>
