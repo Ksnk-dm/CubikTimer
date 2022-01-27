@@ -1,11 +1,13 @@
 package com.ukrkosenko.cubikrubicktime.ui.main;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton infoImageButton;
     private TimerRun timerRun;
     private InterstitialAd mInterstitialAd;
+    private LinearLayout homeLinearLayout;
+    private LinearLayout recyclerViewLinearLayout;
 
 
     @Override
@@ -104,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         minTextView = findViewById(R.id.min_text_view);
         recordRecyclerView = findViewById(R.id.record_recycler_view);
         mAdView = findViewById(R.id.adView);
+        homeLinearLayout = findViewById(R.id.home_linear_layout);
+        recyclerViewLinearLayout = findViewById(R.id.recycler_view_linear_layout);
     }
 
     private void checkFirstStart() {
@@ -137,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     private void initRecycler() {
         layoutManager = new GridLayoutManager(this, 1);
         recordRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new ListAdapter();
+        mAdapter = new ListAdapter(timeTextOnClickListener);
         recordRecyclerView.setAdapter(mAdapter);
     }
 
@@ -145,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private void setListeners() {
         infoImageButton.setOnClickListener(imageButtonOnClickListener);
         timeTextView.setOnClickListener(timeTextOnClickListener);
+        homeLinearLayout.setOnClickListener(timeTextOnClickListener);
         timeTextView.setOnLongClickListener(timeTextOnLongClickListener);
         timeTextView.setOnTouchListener(timeTextViewOnTouchListener);
     }
@@ -159,33 +167,39 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void convertToStr(int time) {
-        String timeStr = String.valueOf(time);
-        char[] strToArray = timeStr.toCharArray();
-        for (int i = 0; i < strToArray.length; i++) {
-            if (strToArray.length <= 2) {
-                minTextView.setText("00.00." + strToArray[0] + strToArray[1]);
-            } else {
-                if (strToArray.length <= 3) {
-                    minTextView.setText("00." + "0" + strToArray[0] + "." + strToArray[1] + strToArray[2]);
+        try {
+
+
+            String timeStr = String.valueOf(time);
+            char[] strToArray = timeStr.toCharArray();
+            for (int i = 0; i < strToArray.length; i++) {
+                if (strToArray.length <= 2) {
+                    minTextView.setText("00.00." + strToArray[0] + strToArray[1]);
                 } else {
-                    if (strToArray.length <= 4) {
-                        minTextView.setText("00." + strToArray[0] + strToArray[1] + "." + strToArray[2]
-                                + strToArray[3]);
+                    if (strToArray.length <= 3) {
+                        minTextView.setText("00." + "0" + strToArray[0] + "." + strToArray[1] + strToArray[2]);
                     } else {
-                        if (strToArray.length <= 5) {
-                            minTextView.setText("0" + strToArray[0] + "." + strToArray[1] + strToArray[2]
-                                    + "." + strToArray[3] + strToArray[4]);
+                        if (strToArray.length <= 4) {
+                            minTextView.setText("00." + strToArray[0] + strToArray[1] + "." + strToArray[2]
+                                    + strToArray[3]);
                         } else {
-                            if (strToArray.length <= 6) {
-                                minTextView.setText(strToArray[0] + strToArray[1] + "." + strToArray[2]
-                                        + strToArray[3] + "." + strToArray[4] + strToArray[5]);
+                            if (strToArray.length <= 5) {
+                                minTextView.setText("0" + strToArray[0] + "." + strToArray[1] + strToArray[2]
+                                        + "." + strToArray[3] + strToArray[4]);
                             } else {
-                                minTextView.setText(getResources().getString(R.string.error));
+                                if (strToArray.length <= 6) {
+                                    minTextView.setText(strToArray[0] + strToArray[1] + "." + strToArray[2]
+                                            + strToArray[3] + "." + strToArray[4] + strToArray[5]);
+                                } else {
+                                    minTextView.setText(getResources().getString(R.string.error));
+                                }
                             }
                         }
                     }
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            minTextView.setText(R.string.error);
         }
     }
 
