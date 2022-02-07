@@ -37,7 +37,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder>{
     public void onBindViewHolder(@NonNull ListViewHolder holder, int position) {
         Records item = getPosition(position);
         holder.itemsTextView.setText(item.getTime());
-        holder.itemView.setOnClickListener(onClickListener);
+      //  holder.itemView.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -57,5 +57,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListViewHolder>{
     public void addItems(Records records){
         items.add(records);
         notifyDataSetChanged();
+
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_linear_layout"
@@ -8,106 +8,117 @@
     android:background="@color/black"
     tools:context=".ui.main.MainActivity">
 
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:foregroundGravity="left|center_horizontal"
+        android:gravity="center"
+        android:text="00.00.00"
+        android:textColor="@color/white"
+        android:textSize="96sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="bottom|right"
+        android:orientation="horizontal"
+        android:paddingLeft="0dp"
+        android:paddingBottom="10dp"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="@+id/timeText"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:text="@string/best"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/min_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="00.00.00"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/theme_imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            android:background="@android:color/transparent"
+            android:foregroundGravity="right"
+            app:srcCompat="@drawable/ic_day" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-2981423664535117/5354187896"></com.google.android.gms.ads.AdView>
+
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/recycler_view_linear_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="40dp"
         android:clickable="false"
         android:orientation="vertical"
-        android:weightSum="3">
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/record_recycler_view"
             android:layout_width="90dp"
-            android:layout_height="400dp"
-            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
             android:layout_marginTop="10dp"
             android:layout_weight="3"
             android:clickable="true"
-            android:focusable="true" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:foregroundGravity="bottom"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:foregroundGravity="bottom"
-                    android:gravity="bottom"
-                    android:text="@string/best"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/min_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="3dp"
-                    android:text="00.00.00"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-        </LinearLayout>
+            android:focusable="true"
+            android:scrollIndicators="right"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <ImageButton
+        android:id="@+id/info_image_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:foregroundGravity="right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_info_24" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_weight="3"
-                app:adSize="BANNER"
-                app:adUnitId="ca-app-pub-2981423664535117/5354187896"></com.google.android.gms.ads.AdView>
-
-            <ImageButton
-                android:id="@+id/info_image_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/transparent"
-                android:foregroundGravity="right"
-                app:srcCompat="@drawable/ic_baseline_info_24" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/timeText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="100dp"
-            android:layout_marginBottom="55dp"
-            android:foregroundGravity="left|center_horizontal"
-            android:gravity="center"
-            android:text="00.00.00"
-            android:textColor="@color/white"
-            android:textSize="96sp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
