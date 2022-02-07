@@ -1,14 +1,18 @@
 package com.ukrkosenko.cubikrubicktime.ui.main;
 
+import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +21,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -51,22 +54,47 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton infoImageButton;
     private TimerRun timerRun;
     private InterstitialAd mInterstitialAd;
-    private LinearLayout homeLinearLayout;
-    private LinearLayout recyclerViewLinearLayout;
+    private ConstraintLayout constraintLayout;
+    private ImageButton changeThemeImageButton;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPrefsEditor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
         init();
         initRecycler();
         setVariables();
         setListeners();
+        initSharedPrefs();
+        setTheme();
         initBanner();
         initPageBanner(initAdRequest());
+    }
+
+    private void initSharedPrefs() {
+        sharedPreferences = getSharedPreferences(Contains.PREFS_NAME, MODE_PRIVATE);
+        sharedPrefsEditor = sharedPreferences.edit();
+    }
+
+    private void setFullScreenAndScreenOn() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setFullScreenAndScreenOn();
     }
 
     private void initBanner() {
@@ -109,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
         minTextView = findViewById(R.id.min_text_view);
         recordRecyclerView = findViewById(R.id.record_recycler_view);
         mAdView = findViewById(R.id.adView);
-        homeLinearLayout = findViewById(R.id.home_linear_layout);
-        recyclerViewLinearLayout = findViewById(R.id.recycler_view_linear_layout);
+        constraintLayout = findViewById(R.id.home_linear_layout);
+        changeThemeImageButton = findViewById(R.id.theme_imageView);
     }
 
     private void checkFirstStart() {
@@ -125,12 +153,13 @@ public class MainActivity extends AppCompatActivity {
             convertToInt(timerRun.textView.getText().toString());
             mAdapter.addItems(new Records(timerRun.textView.getText().toString()));
             mAdapter.notifyDataSetChanged();
+
         }
     }
 
     private void checkClickIfTimerStart() {
         if (timeTextView.getText().equals(Contains.TIME_NULL)) {
-            timeTextView.setTextColor(Color.WHITE);
+            timeTextView.setTextColor(getColor(R.color.colorTimer));
             if (!timerRun.getStatus()) {
                 timerRun.start();
             }
@@ -152,9 +181,10 @@ public class MainActivity extends AppCompatActivity {
     private void setListeners() {
         infoImageButton.setOnClickListener(imageButtonOnClickListener);
         timeTextView.setOnClickListener(timeTextOnClickListener);
-        homeLinearLayout.setOnClickListener(timeTextOnClickListener);
+        constraintLayout.setOnClickListener(timeTextOnClickListener);
         timeTextView.setOnLongClickListener(timeTextOnLongClickListener);
         timeTextView.setOnTouchListener(timeTextViewOnTouchListener);
+        changeThemeImageButton.setOnClickListener(changeThemeOnClickListener);
     }
 
     private void convertToInt(String time) {
@@ -168,8 +198,6 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void convertToStr(int time) {
         try {
-
-
             String timeStr = String.valueOf(time);
             char[] strToArray = timeStr.toCharArray();
             for (int i = 0; i < strToArray.length; i++) {
@@ -209,10 +237,11 @@ public class MainActivity extends AppCompatActivity {
             checkFirstStart();
             if (timerRun.getStatus()) {
                 timerRun.pause();
-                timeTextView.setTextColor(Color.WHITE);
+                timeTextView.setTextColor(getColor(R.color.colorTimer));
                 setNewItem();
+                recordRecyclerView.scrollToPosition(resultList.size() - 1);
             } else {
-                timeTextView.setTextColor(Color.WHITE);
+                timeTextView.setTextColor(getColor(R.color.colorTimer));
             }
         }
     };
@@ -240,6 +269,37 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    private final View.OnClickListener changeThemeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            switch (currentNightMode) {
+                case Configuration.UI_MODE_NIGHT_NO:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
+                    break;
+                case Configuration.UI_MODE_NIGHT_YES:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
+                    break;
+            }
+        }
+    };
+
+    private void setTheme() {
+        int currentNightMode = sharedPreferences.getInt(Contains.THEME_ID, 0);
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
+                break;
+        }
+    }
 
     private final View.OnTouchListener timeTextViewOnTouchListener = new View.OnTouchListener() {
         @SuppressLint("ClickableViewAccessibility")

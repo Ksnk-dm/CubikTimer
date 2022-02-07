@@ -26,10 +26,10 @@ public class InfoActivity extends AppCompatActivity {
 
     private void init() {
         firstImageView = findViewById(R.id.first_mage_view);
-        Picasso.get().load("https://i2.piccy.info/i9/d6f2a22082c55e2c8c6b61929c914dc0/1642949441/14057/1453485/12542f53_285d_4197_a478_eb9ab908a189.jpg").into(firstImageView);
+        Picasso.get().load("https://i.ibb.co/3ctyyB9/12542f53-285d-4197-a478-eb9ab908a189.jpg").into(firstImageView);
         secondImageView = findViewById(R.id.second_image_view);
-        Picasso.get().load("https://i2.piccy.info/i9/3b6d881a67ab62b79714e861fe2a3c17/1642949943/17981/1453485/photo1642949301.jpg").into(secondImageView);
+        Picasso.get().load("https://i.ibb.co/84HVPSW/photo1642949301.jpg").into(secondImageView);
         thirdImageView = findViewById(R.id.third_image_view);
-        Picasso.get().load("https://i2.piccy.info/i9/40ba452ff915c9bbabac704ce2aafd92/1642950160/20188/1453485/photo1642949315.jpg").into(thirdImageView);
+        Picasso.get().load("https://i.ibb.co/K7HHz0j/photo1642949315.jpg").into(thirdImageView);
     }
 }

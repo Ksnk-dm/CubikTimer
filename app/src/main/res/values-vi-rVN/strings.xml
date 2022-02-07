@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bộ đếm thời gian lập phương của Rubik</string>
+    <string name="best">TỐT NHẤT:</string>
+    <string name="error">Lỗi</string>
+    <string name="title">Hướng dẫn sử dụng</string>
+    <string name="hold">- Giữ màn hình và thả ra để bắt đầu đếm ngược</string>
+    <string name="one_click">-Nhấn một lần để dừng hẹn giờ</string>
+    <string name="result">-Kết quả của bạn sẽ được viết ở bên trái và kết quả tốt nhất sẽ được ghi ở dưới cùng.</string>
+    <string name="dev">Được phát triển bởi Ksnk-dm</string>
+</resources>
