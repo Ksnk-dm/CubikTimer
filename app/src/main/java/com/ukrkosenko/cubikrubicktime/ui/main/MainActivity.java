@@ -1,13 +1,11 @@
 package com.ukrkosenko.cubikrubicktime.ui.main;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -65,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         initRecycler();
         setVariables();
         setListeners();
-        initBanner();
-        initPageBanner(initAdRequest());
+        //initBanner();
+      //  initPageBanner(initAdRequest());
     }
 
     private void initBanner() {
@@ -168,8 +166,6 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void convertToStr(int time) {
         try {
-
-
             String timeStr = String.valueOf(time);
             char[] strToArray = timeStr.toCharArray();
             for (int i = 0; i < strToArray.length; i++) {
