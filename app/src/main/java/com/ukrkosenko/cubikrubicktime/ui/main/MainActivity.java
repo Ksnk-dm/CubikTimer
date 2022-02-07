@@ -71,16 +71,15 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
         initSharedPrefs();
         setTheme();
-
-        //   initBanner();
-        //  initPageBanner(initAdRequest());
+        initBanner();
+        initPageBanner(initAdRequest());
     }
 
     private void initSharedPrefs() {
         sharedPreferences = getSharedPreferences(Contains.PREFS_NAME, MODE_PRIVATE);
         sharedPrefsEditor = sharedPreferences.edit();
     }
-    
+
     private void setFullScreenAndScreenOn() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().getDecorView().setSystemUiVisibility(
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
     @Override
