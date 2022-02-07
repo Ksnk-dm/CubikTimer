@@ -47,6 +47,7 @@
             android:id="@+id/min_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
             android:layout_weight="3"
             android:text="00.00.00"
             android:textColor="@color/white"
@@ -113,8 +114,10 @@
 
     <ImageButton
         android:id="@+id/info_image_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
         android:background="@android:color/transparent"
         android:foregroundGravity="right"
         app:layout_constraintEnd_toEndOf="parent"

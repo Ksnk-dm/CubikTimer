@@ -63,18 +63,39 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
         init();
         initRecycler();
         setVariables();
         setListeners();
-        sharedPreferences = getSharedPreferences("name", MODE_PRIVATE);
-        sharedPrefsEditor = sharedPreferences.edit();
+        initSharedPrefs();
         setTheme();
+
         //   initBanner();
         //  initPageBanner(initAdRequest());
+    }
+
+    private void initSharedPrefs() {
+        sharedPreferences = getSharedPreferences(Contains.PREFS_NAME, MODE_PRIVATE);
+        sharedPrefsEditor = sharedPreferences.edit();
+    }
+    
+    private void setFullScreenAndScreenOn() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setFullScreenAndScreenOn();
     }
 
     private void initBanner() {
@@ -257,27 +278,26 @@ public class MainActivity extends AppCompatActivity {
             switch (currentNightMode) {
                 case Configuration.UI_MODE_NIGHT_NO:
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    sharedPrefsEditor.putInt("theme", currentNightMode).apply();
+                    sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
                     break;
                 case Configuration.UI_MODE_NIGHT_YES:
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    sharedPrefsEditor.putInt("theme", currentNightMode).apply();
+                    sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
                     break;
             }
-            //    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
     };
 
-    private void setTheme(){
-        int currentNightMode = sharedPreferences.getInt("theme", 0);
+    private void setTheme() {
+        int currentNightMode = sharedPreferences.getInt(Contains.THEME_ID, 0);
         switch (currentNightMode) {
             case Configuration.UI_MODE_NIGHT_NO:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                sharedPrefsEditor.putInt("theme", currentNightMode).apply();
+                sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
                 break;
             case Configuration.UI_MODE_NIGHT_YES:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                sharedPrefsEditor.putInt("theme", currentNightMode).apply();
+                sharedPrefsEditor.putInt(Contains.THEME_ID, currentNightMode).apply();
                 break;
         }
     }
