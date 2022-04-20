@@ -18,8 +18,7 @@ It is very easy to use, just hold the screen and then release it and the stopwat
 ![compileSdkVersion 31](https://img.shields.io/badge/compileSdkVersion-31-yellow.svg?style=true)
 [![Unit tests](https://github.com/Ksnk-dm/CubikTimer/blob/master/.github/workflows/badge.svg)](https://github.com/Ksnk-dm/CubikTimer/actions/workflows/unit_tests.yml)
 
-
-![First screen](https://i2.piccy.info/i9/1a4c97ab9c20a1cae4a283153c66da82/1642967155/115786/1453485/ezgif_2_9b8041a482.gif)  ![Second screen](https://s1.hostingkartinok.com/uploads/images/2022/01/3d196eafacd7d52a70c2757a70aeadb5.gif)
+ ![Second screen](https://s1.hostingkartinok.com/uploads/images/2022/01/3d196eafacd7d52a70c2757a70aeadb5.gif)
 
 ## Libraries and tools used in the project
 
