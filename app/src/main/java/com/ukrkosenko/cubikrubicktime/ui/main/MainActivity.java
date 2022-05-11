@@ -3,6 +3,7 @@ package com.ukrkosenko.cubikrubicktime.ui.main;
 import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -23,6 +24,14 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
@@ -40,7 +49,9 @@ import com.ukrkosenko.cubikrubicktime.ui.info.InfoActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private TextView timeTextView;
@@ -58,13 +69,23 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton changeThemeImageButton;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPrefsEditor;
-
-
+    private BillingClient.Builder mBillingClient;
+    private Map<String, SkuDetails> mSkuDetailsMap = new HashMap<>();
+    private String mSkuId = "sku_id_1";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
+        mBillingClient = BillingClient.newBuilder(this).setListener(new PurchasesUpdatedListener() {
+
+            @Override
+            public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+
+            }
+        });
+
+
         init();
         initRecycler();
         setVariables();
@@ -74,6 +95,22 @@ public class MainActivity extends AppCompatActivity {
         initBanner();
         initPageBanner(initAdRequest());
     }
+
+    private void querySkuDetails() {
+        SkuDetailsParams.Builder skuDetailsParamsBuilder = SkuDetailsParams.newBuilder();
+        List<String> skuList = new ArrayList<>();
+        skuList.add(mSkuId);
+        skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
+        mBillingClient.(skuDetailsParamsBuilder.build(), new SkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
+                if (billingResult.getResponseCode() == 0) {
+                    for (SkuDetails skuDetails : list) {
+                        mSkuDetailsMap.put(skuDetails.getSku(), skuDetails);
+                    }
+            }
+
+        }});}
 
     private void initSharedPrefs() {
         sharedPreferences = getSharedPreferences(Contains.PREFS_NAME, MODE_PRIVATE);
