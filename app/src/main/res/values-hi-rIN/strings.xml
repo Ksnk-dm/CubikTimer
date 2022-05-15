@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rubik\'s Cube Timer</string>
+    <string name="best">श्रेष्ठ:</string>
+    <string name="error">गलती</string>
+    <string name="title">उपयोग के लिए निर्देश</string>
+    <string name="hold">- स्क्रीन को होल्ड करें और उलटी गिनती शुरू करने के लिए रिलीज करें</string>
+    <string name="one_click">- टाइमर बंद करने के लिए एक बार दबाएं</string>
+    <string name="result">-आपके परिणाम बाईं ओर लिखे जाएंगे और सबसे अच्छा परिणाम सबसे नीचे होगा।</string>
+    <string name="dev">विकसित Ksnk-dm</string>
+</resources>

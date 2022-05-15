@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -146,18 +147,19 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
     public void launchBilling(String skuId) {
         BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(Objects.requireNonNull(mSkuDetailsMap.get(skuId)))
+                .setSkuDetails(mSkuDetailsMap.get(skuId))
                 .build();
         mBillingClient.launchBillingFlow(this, billingFlowParams);
     }
 
     private void initBanner() {
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-            }
-        });
-        mAdView.loadAd(initAdRequest());
+        boolean statusVisibility = sharedPreferences.getBoolean(Contains.STATUS_PAY_BUTTON, true);
+        if (statusVisibility) {
+            mAdView.loadAd(initAdRequest());
+        } else {
+            mAdView.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private void initPageBanner(AdRequest adRequest) {
@@ -209,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
             convertToInt(timerRun.textView.getText().toString());
             mAdapter.addItems(new Records(timerRun.textView.getText().toString()));
             mAdapter.notifyDataSetChanged();
-
         }
     }
 
@@ -312,8 +313,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
             } else {
                 Log.d(Contains.LOG, "null");
             }
-            Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
-            startActivity(infoActivity);
+            startInfoActivity();
         }
     };
 
@@ -372,39 +372,48 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
     @Override
     public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-        Log.d("paysss", "1" + list.toString());
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
             payComplete();
         }
     }
 
     private void payComplete() {
-        payImageButton.setVisibility(View.GONE);
-        infoImageButton.setVisibility(View.GONE);
+        sharedPrefsEditor.putBoolean(Contains.STATUS_PAY_BUTTON, false).apply();
+        payImageButton.setVisibility(View.INVISIBLE);
+        infoImageButton.setVisibility(View.INVISIBLE);
         infoImageButtonNoAds.setVisibility(View.VISIBLE);
         mAdView.setVisibility(View.GONE);
         mAdView.destroy();
     }
 
+    private void startInfoActivity() {
+        Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
+        startActivity(infoActivity);
+    }
+
     private final View.OnClickListener noAdsImageButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
-            startActivity(infoActivity);
+            startInfoActivity();
         }
     };
 
     private final View.OnClickListener payImageButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            launchBilling(mSkuId);
+            try {
+                launchBilling(mSkuId);
+            } catch (IllegalArgumentException e) {
+                e.getStackTrace();
+                Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
     private final BillingClientStateListener billingClientStateListener = new BillingClientStateListener() {
         @Override
         public void onBillingServiceDisconnected() {
-
+            initBanner();
         }
 
         @Override
@@ -416,6 +425,8 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                     ArrayList<String> purchaseId = purchasesList.get(i).getSkus();
                     if (TextUtils.equals(mSkuId, purchaseId.get(i))) {
                         payComplete();
+                    } else {
+                        initBanner();
                     }
                 }
             }

@@ -16,7 +16,7 @@
         android:gravity="center"
         android:text="00.00.00"
         android:textColor="@color/white"
-        android:textSize="96sp"
+        android:textSize="104sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
             android:layout_marginRight="15dp"
             android:background="@android:color/transparent"
             android:foregroundGravity="right"
-            android:rotationY="180"
+            android:rotation="25"
             app:srcCompat="@drawable/ic_day" />
     </LinearLayout>
 
@@ -82,8 +82,10 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:visibility="visible"
             app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-2981423664535117/5354187896"></com.google.android.gms.ads.AdView>
+            app:adUnitId="ca-app-pub-2981423664535117/5354187896"
+            tools:visibility="visible"></com.google.android.gms.ads.AdView>
 
     </LinearLayout>
 
@@ -135,10 +137,11 @@
         android:layout_marginRight="15dp"
         android:background="@android:color/transparent"
         android:foregroundGravity="right"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_info_24" />
+        app:srcCompat="@drawable/ic_baseline_info_24"
+        tools:visibility="invisible" />
 
     <ImageButton
         android:id="@+id/payImageButton"
@@ -146,7 +149,7 @@
         android:layout_height="60dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toStartOf="@+id/info_image_button"
-        app:layout_constraintTop_toTopOf="@+id/timeText"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_ads" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
