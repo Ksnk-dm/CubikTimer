@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     private SharedPreferences.Editor sharedPrefsEditor;
     private BillingClient mBillingClient;
     private Map<String, SkuDetails> mSkuDetailsMap = new HashMap<>();
-    private final String mSkuId = "ads_1";
+    private final String mSkuId = "ads_2";
     private final String adUnitId = "ca-app-pub-2981423664535117/4013186062";
     private ImageButton payImageButton;
     private ImageButton infoImageButtonNoAds;
@@ -154,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
             mAdView.loadAd(initAdRequest());
         } else {
             mAdView.setVisibility(View.INVISIBLE);
+            infoImageButtonNoAds.setVisibility(View.VISIBLE);
+            payImageButton.setVisibility(View.INVISIBLE);
+            infoImageButton.setVisibility(View.INVISIBLE);
         }
 
     }
