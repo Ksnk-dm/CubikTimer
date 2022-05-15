@@ -1,7 +1,5 @@
 package com.ukrkosenko.cubikrubicktime.ui.main;
 
-import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +18,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -54,6 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener {
     private TextView timeTextView;
@@ -73,55 +71,18 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     private SharedPreferences.Editor sharedPrefsEditor;
     private BillingClient mBillingClient;
     private Map<String, SkuDetails> mSkuDetailsMap = new HashMap<>();
-    private String mSkuId = "ads_1";
-    private ImageButton imageButton;
+    private final String mSkuId = "ads_1";
+    private final String adUnitId = "ca-app-pub-2981423664535117/4013186062";
+    private ImageButton payImageButton;
     private ImageButton infoImageButtonNoAds;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
-        infoImageButtonNoAds=findViewById(R.id.info_image_button_no_ads);
-        infoImageButtonNoAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
-                startActivity(infoActivity);
-            }
-        });
-        imageButton = findViewById(R.id.payImageButton);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchBilling(mSkuId);
-                // payComplete();
-            }
-        });
-        mBillingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
-        mBillingClient.startConnection(new BillingClientStateListener() {
-            @Override
-            public void onBillingServiceDisconnected() {
-                //сюда мы попадем если что-то пойдет не так
-            }
-
-            @Override
-            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
-                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    //здесь мы можем запросить информацию о товарах и покупках
-                    querySkuDetails(); //запрос о товарах
-                    List<Purchase> purchasesList = queryPurchases(); //запрос о покупках
-                    //если товар уже куплен, предоставить его пользователю
-                    for (int i = 0; i < purchasesList.size(); i++) {
-                        ArrayList<String> purchaseId = purchasesList.get(i).getSkus();
-                        Log.d("tagg", purchaseId.toString());
-                        if (TextUtils.equals(mSkuId, purchaseId.get(i))) {
-                            payComplete();
-                        }
-                    }
-                }
-            }
-        });
+        iniBilling();
         init();
         initRecycler();
         setVariables();
@@ -130,7 +91,11 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         setTheme();
         initBanner();
         initPageBanner(initAdRequest());
+    }
 
+    private void iniBilling() {
+        mBillingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
+        mBillingClient.startConnection(billingClientStateListener);
     }
 
     private List<Purchase> queryPurchases() {
@@ -147,8 +112,8 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
             @Override
             public void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
                 if (billingResult.getResponseCode() == 0) {
+                    assert list != null;
                     for (SkuDetails skuDetails : list) {
-                        Log.d("payss", skuDetails.getSku().toString());
                         mSkuDetailsMap.put(skuDetails.getSku(), skuDetails);
                     }
                 }
@@ -181,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
     public void launchBilling(String skuId) {
         BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(mSkuDetailsMap.get(skuId))
+                .setSkuDetails(Objects.requireNonNull(mSkuDetailsMap.get(skuId)))
                 .build();
         mBillingClient.launchBillingFlow(this, billingFlowParams);
     }
@@ -196,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     }
 
     private void initPageBanner(AdRequest adRequest) {
-        InterstitialAd.load(this, "ca-app-pub-2981423664535117/4013186062", adRequest,
+        InterstitialAd.load(this, adUnitId, adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -228,6 +193,8 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         mAdView = findViewById(R.id.adView);
         constraintLayout = findViewById(R.id.home_linear_layout);
         changeThemeImageButton = findViewById(R.id.theme_imageView);
+        infoImageButtonNoAds = findViewById(R.id.info_image_button_no_ads);
+        payImageButton = findViewById(R.id.payImageButton);
     }
 
     private void checkFirstStart() {
@@ -274,6 +241,8 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         timeTextView.setOnLongClickListener(timeTextOnLongClickListener);
         timeTextView.setOnTouchListener(timeTextViewOnTouchListener);
         changeThemeImageButton.setOnClickListener(changeThemeOnClickListener);
+        infoImageButtonNoAds.setOnClickListener(noAdsImageButtonOnClickListener);
+        payImageButton.setOnClickListener(payImageButtonOnClickListener);
     }
 
     private void convertToInt(String time) {
@@ -394,10 +363,8 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_UP:
-                    checkClickIfTimerStart();
-                    break;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                checkClickIfTimerStart();
             }
             return false;
         }
@@ -412,10 +379,46 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     }
 
     private void payComplete() {
-        imageButton.setVisibility(View.GONE);
+        payImageButton.setVisibility(View.GONE);
         infoImageButton.setVisibility(View.GONE);
         infoImageButtonNoAds.setVisibility(View.VISIBLE);
         mAdView.setVisibility(View.GONE);
         mAdView.destroy();
     }
+
+    private final View.OnClickListener noAdsImageButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
+            startActivity(infoActivity);
+        }
+    };
+
+    private final View.OnClickListener payImageButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            launchBilling(mSkuId);
+        }
+    };
+
+    private final BillingClientStateListener billingClientStateListener = new BillingClientStateListener() {
+        @Override
+        public void onBillingServiceDisconnected() {
+
+        }
+
+        @Override
+        public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+            if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                querySkuDetails();
+                List<Purchase> purchasesList = queryPurchases();
+                for (int i = 0; i < purchasesList.size(); i++) {
+                    ArrayList<String> purchaseId = purchasesList.get(i).getSkus();
+                    if (TextUtils.equals(mSkuId, purchaseId.get(i))) {
+                        payComplete();
+                    }
+                }
+            }
+        }
+    };
 }
