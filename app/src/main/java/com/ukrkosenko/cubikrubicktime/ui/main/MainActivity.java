@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
@@ -53,7 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener {
     private TextView timeTextView;
     private RecyclerView recordRecyclerView;
     private ListAdapter mAdapter;
@@ -69,23 +71,48 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton changeThemeImageButton;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedPrefsEditor;
-    private BillingClient.Builder mBillingClient;
+    private BillingClient mBillingClient;
     private Map<String, SkuDetails> mSkuDetailsMap = new HashMap<>();
-    private String mSkuId = "sku_id_1";
+    private String mSkuId = "ads_1";
+    private ImageButton imageButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
-        mBillingClient = BillingClient.newBuilder(this).setListener(new PurchasesUpdatedListener() {
-
+        imageButton = findViewById(R.id.payImageButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-
+            public void onClick(View view) {
+               launchBilling(mSkuId);
+               // payComplete();
             }
         });
+        mBillingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
+        mBillingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingServiceDisconnected() {
+                //сюда мы попадем если что-то пойдет не так
+            }
 
-
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //здесь мы можем запросить информацию о товарах и покупках
+                    querySkuDetails(); //запрос о товарах
+                    List<Purchase> purchasesList = queryPurchases(); //запрос о покупках
+Log.d("ddd", purchasesList.toString());
+                    //если товар уже куплен, предоставить его пользователю
+                    for (int i = 0; i < purchasesList.size(); i++) {
+                        ArrayList<String> purchaseId = purchasesList.get(i).getSkus();
+                        if(TextUtils.equals(mSkuId, purchaseId.get(i))) {
+                            payComplete();
+                        }
+                    }
+                }
+            }
+        });
         init();
         initRecycler();
         setVariables();
@@ -94,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
         setTheme();
         initBanner();
         initPageBanner(initAdRequest());
+
+    }
+
+    private List<Purchase> queryPurchases() {
+        Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
+        return purchasesResult.getPurchasesList();
     }
 
     private void querySkuDetails() {
@@ -101,16 +134,19 @@ public class MainActivity extends AppCompatActivity {
         List<String> skuList = new ArrayList<>();
         skuList.add(mSkuId);
         skuDetailsParamsBuilder.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
-        mBillingClient.(skuDetailsParamsBuilder.build(), new SkuDetailsResponseListener() {
+        mBillingClient.querySkuDetailsAsync(skuDetailsParamsBuilder.build(), new SkuDetailsResponseListener() {
             @Override
             public void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
                 if (billingResult.getResponseCode() == 0) {
                     for (SkuDetails skuDetails : list) {
+                        Log.d("payss", skuDetails.getSku().toString());
                         mSkuDetailsMap.put(skuDetails.getSku(), skuDetails);
                     }
+                }
             }
+        });
+    }
 
-        }});}
 
     private void initSharedPrefs() {
         sharedPreferences = getSharedPreferences(Contains.PREFS_NAME, MODE_PRIVATE);
@@ -132,6 +168,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setFullScreenAndScreenOn();
+    }
+
+    public void launchBilling(String skuId) {
+        BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
+                .setSkuDetails(mSkuDetailsMap.get(skuId))
+                .build();
+        mBillingClient.launchBillingFlow(this, billingFlowParams);
     }
 
     private void initBanner() {
@@ -350,4 +393,18 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        Log.d("paysss", "1"+list.toString());
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+
+            payComplete();
+        }
+    }
+
+    private void payComplete() {
+        mAdView.setVisibility(View.GONE);
+        mAdView.destroy();
+    }
 }
