@@ -75,18 +75,27 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     private Map<String, SkuDetails> mSkuDetailsMap = new HashMap<>();
     private String mSkuId = "ads_1";
     private ImageButton imageButton;
+    private ImageButton infoImageButtonNoAds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
+        infoImageButtonNoAds=findViewById(R.id.info_image_button_no_ads);
+        infoImageButtonNoAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent infoActivity = new Intent(getApplicationContext(), InfoActivity.class);
+                startActivity(infoActivity);
+            }
+        });
         imageButton = findViewById(R.id.payImageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               launchBilling(mSkuId);
-               // payComplete();
+                launchBilling(mSkuId);
+                // payComplete();
             }
         });
         mBillingClient = BillingClient.newBuilder(this).setListener(this).enablePendingPurchases().build();
@@ -102,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                     //здесь мы можем запросить информацию о товарах и покупках
                     querySkuDetails(); //запрос о товарах
                     List<Purchase> purchasesList = queryPurchases(); //запрос о покупках
-Log.d("ddd", purchasesList.toString());
                     //если товар уже куплен, предоставить его пользователю
                     for (int i = 0; i < purchasesList.size(); i++) {
                         ArrayList<String> purchaseId = purchasesList.get(i).getSkus();
-                        if(TextUtils.equals(mSkuId, purchaseId.get(i))) {
+                        Log.d("tagg", purchaseId.toString());
+                        if (TextUtils.equals(mSkuId, purchaseId.get(i))) {
                             payComplete();
                         }
                     }
@@ -396,14 +405,16 @@ Log.d("ddd", purchasesList.toString());
 
     @Override
     public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
-        Log.d("paysss", "1"+list.toString());
+        Log.d("paysss", "1" + list.toString());
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-
             payComplete();
         }
     }
 
     private void payComplete() {
+        imageButton.setVisibility(View.GONE);
+        infoImageButton.setVisibility(View.GONE);
+        infoImageButtonNoAds.setVisibility(View.VISIBLE);
         mAdView.setVisibility(View.GONE);
         mAdView.destroy();
     }
