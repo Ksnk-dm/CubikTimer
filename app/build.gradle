@@ -9,8 +9,8 @@ android {
         applicationId "com.ukrkosenko.cubikrubicktime"
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 8
-        versionName "4.01"
+        versionCode 9
+        versionName "4.02"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
