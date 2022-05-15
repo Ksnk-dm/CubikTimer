@@ -35,16 +35,13 @@ import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.ukrkosenko.cubikrubicktime.Contains;
+import com.ukrkosenko.cubikrubicktime.utils.Contains;
 import com.ukrkosenko.cubikrubicktime.ui.main.adapter.ListAdapter;
 import com.ukrkosenko.cubikrubicktime.R;
 import com.ukrkosenko.cubikrubicktime.empty.Records;
-import com.ukrkosenko.cubikrubicktime.TimerRun;
+import com.ukrkosenko.cubikrubicktime.utils.TimerRun;
 import com.ukrkosenko.cubikrubicktime.ui.info.InfoActivity;
 
 import java.util.ArrayList;
@@ -52,7 +49,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements PurchasesUpdatedListener {
     private TextView timeTextView;

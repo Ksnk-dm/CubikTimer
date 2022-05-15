@@ -1,4 +1,4 @@
-package com.ukrkosenko.cubikrubicktime;
+package com.ukrkosenko.cubikrubicktime.utils;
 
 import android.os.Handler;
 import android.widget.TextView;

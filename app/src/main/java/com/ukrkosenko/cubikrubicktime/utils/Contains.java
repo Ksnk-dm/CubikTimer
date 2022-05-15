@@ -1,4 +1,4 @@
-package com.ukrkosenko.cubikrubicktime;
+package com.ukrkosenko.cubikrubicktime.utils;
 
 public class Contains {
     public final static String TIME_NULL = "00.00.00";
