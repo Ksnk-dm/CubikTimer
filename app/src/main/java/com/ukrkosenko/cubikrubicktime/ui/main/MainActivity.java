@@ -28,6 +28,7 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     private final String adUnitId = "ca-app-pub-2981423664535117/4013186062";
     private ImageButton payImageButton;
     private ImageButton infoImageButtonNoAds;
+    private List<Purchase> listPurs;
 
 
     @Override
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
         iniBilling();
+        queryPurchases();
         init();
         initRecycler();
         setVariables();
@@ -95,9 +98,18 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         mBillingClient.startConnection(billingClientStateListener);
     }
 
-    private List<Purchase> queryPurchases() {
-        Purchase.PurchasesResult purchasesResult = mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
-        return purchasesResult.getPurchasesList();
+    private void queryPurchases() {
+    mBillingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP, new PurchasesResponseListener() {
+            @Override
+            public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> list) {
+
+                listPurs = list;
+
+
+                Log.d("ddddd", list.toString());
+
+            } });
+
     }
 
     private void querySkuDetails() {
@@ -417,11 +429,14 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
 
         @Override
         public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+
+            Log.d("ddddd", "ee"+listPurs.toString());
             if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
                 querySkuDetails();
-                List<Purchase> purchasesList = queryPurchases();
-                for (int i = 0; i < purchasesList.size(); i++) {
-                    ArrayList<String> purchaseId = purchasesList.get(i).getSkus();
+//                List<Purchase> purchasesList = queryPurchases();
+                Log.d("ddddd", listPurs.toString());
+                for (int i = 0; i < listPurs.size(); i++) {
+                    ArrayList<String> purchaseId = listPurs.get(i).getSkus();
                     if (TextUtils.equals(mSkuId, purchaseId.get(i))) {
                         payComplete();
                     } else {
