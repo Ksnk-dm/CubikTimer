@@ -79,14 +79,13 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         super.onCreate(savedInstanceState);
         setFullScreenAndScreenOn();
         setContentView(R.layout.activity_main);
+        initSharedPrefs();
         iniBilling();
         init();
         initRecycler();
         setVariables();
         setListeners();
-        initSharedPrefs();
         setTheme();
-        initBanner();
         initPageBanner(initAdRequest());
     }
 
@@ -412,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
     private final BillingClientStateListener billingClientStateListener = new BillingClientStateListener() {
         @Override
         public void onBillingServiceDisconnected() {
-            initBanner();
+            Log.d("TAG_INAPP", "Billing client Disconnected");
         }
 
         @Override
@@ -425,7 +424,13 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
                     if (TextUtils.equals(mSkuId, purchaseId.get(i))) {
                         payComplete();
                     } else {
-                        initBanner();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initBanner();
+                            }
+                        });
+
                     }
                 }
             }
