@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements PurchasesUpdatedL
         setVariables();
         setListeners();
         setTheme();
-        //   initBanner();
         initPageBanner(initAdRequest());
     }
 
